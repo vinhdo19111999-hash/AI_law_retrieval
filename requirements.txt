@@ -1,1 +1,17 @@
+# ===== Thư viện cho notebook (Colab) =====
+python-docx          # đọc file .docx
+docx2txt             # đọc nhanh văn bản thô từ .docx
+underthesea          # tách từ tiếng Việt
+pandas
+numpy
+scikit-learn         # TF-IDF + cosine similarity
+openpyxl             # đọc/ghi .xlsx
+matplotlib           # vẽ biểu đồ
 
+# ===== Thư viện cho web app (app/app.py) =====
+streamlit
+sentence-transformers   # kéo theo torch
+# torch                 # (sentence-transformers tự cài; chỉ mở dòng này nếu cần bản cụ thể)
+
+# ===== Tuỳ chọn: mở tunnel khi chạy app trên Colab =====
+pyngrok
