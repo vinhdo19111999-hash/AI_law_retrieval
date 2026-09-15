@@ -95,7 +95,8 @@ def nap_model_va_embedding(duong_dan_chunks: str):
         except Exception:
             pass
 
-    emb = model.encode(corpus, convert_to_numpy=True, batch_size=64, show_progress_bar=False)
+   corpus_with_prefix = [f"passage: {c}" for c in corpus]
+   emb = model.encode(corpus_with_prefix, convert_to_numpy=True, batch_size=64, show_progress_bar=False)
     if DUNG_CACHE_EMB:
         os.makedirs(os.path.dirname(DUONG_DAN_EMB), exist_ok=True)
         np.save(DUONG_DAN_EMB, emb)
@@ -105,7 +106,8 @@ def nap_model_va_embedding(duong_dan_chunks: str):
 def get_embedding(texts):
     if isinstance(texts, str):
         texts = [texts]
-    return model_emb.encode(texts, convert_to_numpy=True, show_progress_bar=False)
+    texts_with_prefix = [f"query: {t}" for t in texts]
+    return model_emb.encode(texts_with_prefix, convert_to_numpy=True, show_progress_bar=False)
 
 
 # ==================== TỪ ĐIỂN ĐỒNG NGHĨA ====================
