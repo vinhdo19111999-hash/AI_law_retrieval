@@ -95,8 +95,8 @@ def nap_model_va_embedding(duong_dan_chunks: str):
         except Exception:
             pass
 
-   corpus_with_prefix = [f"passage: {c}" for c in corpus]
-   emb = model.encode(corpus_with_prefix, convert_to_numpy=True, batch_size=64, show_progress_bar=False)
+    corpus_with_prefix = [f"passage: {c}" for c in corpus]
+    emb = model.encode(corpus_with_prefix, convert_to_numpy=True, batch_size=64, show_progress_bar=False)
     if DUNG_CACHE_EMB:
         os.makedirs(os.path.dirname(DUONG_DAN_EMB), exist_ok=True)
         np.save(DUONG_DAN_EMB, emb)
