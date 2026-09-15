@@ -12,7 +12,7 @@ Hệ thống trả lời theo **3 tầng xử lý**, ưu tiên từ trên xuốn
 2. **Tầng 1 — Tra cứu trực tiếp:** khi người dùng hỏi thẳng "Điều X", "Khoản Y", "Điểm z" → dùng regex để lấy đúng nguyên văn.
 3. **Tầng 2 — Tìm kiếm ngữ nghĩa (semantic search):** khi câu hỏi diễn đạt tự do → nhúng câu hỏi bằng mô hình embedding, so khớp cosine similarity với toàn bộ 606 đoạn luật đã được chunk sẵn.
 
-> ⚠️ **Lưu ý về phạm vi hiện tại:** hệ thống hiện chỉ trả về **nguyên văn điều luật** tìm được (retrieval thuần), **chưa** tích hợp LLM (Gemini/GPT...) để diễn giải lại câu trả lời bằng ngôn ngữ tự nhiên. Đây là hướng phát triển tiếp theo, xem mục [Hướng phát triển](#-hướng-phát-triển).
+> ⚠️ **Lưu ý về phạm vi hiện tại:** hệ thống hiện chỉ trả về **nguyên văn điều luật** tìm được (retrieval thuần), **chưa** tích hợp LLM (Gemini/GPT...) để diễn giải lại câu trả lời bằng ngôn ngữ tự nhiên. Đây là hướng phát triển tiếp theo.
 
 ## 🚀 Tính năng chính
 
@@ -47,7 +47,7 @@ NLP_law_retrieval/
 │   │   └── keyphrase_atvsld.csv      # 150 keyphrase pháp lý đã trích xuất
 │   └── test_questions.csv            # 60 câu hỏi kiểm thử (có đáp án đúng để chấm điểm)
 │
-├── models/                            # Nơi lưu cache embedding (models/e5_embeddings.npy) — sinh ra khi chạy, không commit
+├── model/                            # Nơi lưu cache embedding (models/e5_embeddings.npy) — sinh ra khi chạy, không commit
 │
 ├── notebooks/
 │   └── law.ipynb                     # Notebook thực nghiệm gốc (chạy trên Colab)
@@ -109,8 +109,7 @@ Kết quả (Hit@1/3/5, MRR, biểu đồ so sánh TF-IDF vs E5) sẽ được g
 ## 🚧 Hướng phát triển
 
 - Tích hợp một LLM (ví dụ Gemini API) ở tầng cuối để **diễn giải lại** đoạn luật tìm được thành câu trả lời tự nhiên, thay vì chỉ trả nguyên văn.
-- Gộp `app/app.py` để import trực tiếp từ `src/retrieval.py` thay vì lặp lại logic (đang trùng gần như 100%).
-- Mở rộng bộ đánh giá để chấm luôn tầng 0 (metadata) và tầng 1 (tra cứu trực tiếp Điều/Khoản), hiện `evaluation.py` mới chỉ chấm tầng 2 (ngữ nghĩa).
+- Mở rộng bộ đánh giá để chấm luôn tầng 0 (metadata) và tầng 1 (tra cứu trực tiếp Điều/Khoản).
 - Thử nghiệm và chọn ngưỡng cosine similarity (`nguong`) dựa trên thực nghiệm quét nhiều giá trị, thay vì đặt cố định 0.25.
 
 ## 📄 Giấy phép / Nguồn dữ liệu
