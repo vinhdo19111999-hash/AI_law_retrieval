@@ -24,7 +24,8 @@ DUONG_DAN_EMB = os.environ.get(
     "DUONG_DAN_EMB", os.path.join(GOC_REPO, "models", "e5_embeddings.npy")
 )
 DUNG_CACHE_EMB = True      # True = lưu embedding ra .npy, lần sau chạy lại rất nhanh
-NGUONG_MAC_DINH = 0.25     # ngưỡng tương đồng tối thiểu để coi là "có liên quan"
+NGUONG_MAC_DINH = 0.78     # top-1 >= ngưỡng này -> trả lời "chắc chắn" (hiệu chỉnh bằng ô CALIB trong notebook)
+NGUONG_CUNG = 0.70         # top-1 < ngưỡng này -> từ chối hẳn; giữa 2 ngưỡng -> trả kèm cảnh báo "vùng xám"
 TOP_K_MAC_DINH = 3
 
 # Ba biến toàn cục, được gán khi app khởi động (xem phần "GIAO DIỆN STREAMLIT" ở cuối file)
@@ -223,20 +224,48 @@ def mo_rong_khoan(results):
     return new_results
 
 
-def bai_toan_2_full(cau_hoi, top_k=3, nguong=0.25):
-    raw = bai_toan_2(cau_hoi, top_k=top_k, nguong=nguong)
+def la_rac_ro_rang(cau_hoi: str) -> bool:
+    """TUYẾN 1 — chặn nhanh câu nhập rác rõ ràng trước khi tốn công embedding."""
+    tu = cau_hoi.split()
+    if len(tu) < 3 and "điều" not in cau_hoi.lower():   # quá ngắn (trừ kiểu "Điều 6 là gì?")
+        return True
+    if not re.search(r"[a-zA-ZÀ-ỹ]", cau_hoi):           # toàn số/ký tự đặc biệt
+        return True
+    return False
+
+
+def bai_toan_2_full(cau_hoi, top_k=3, nguong=None):
+    """Tầng 2 + 3 tuyến phòng thủ chống câu vô nghĩa/ngoài miền:
+    1) la_rac_ro_rang: rác rõ ràng -> từ chối ngay
+    2) top-1 < NGUONG_CUNG -> từ chối hẳn
+    3) vùng xám (dưới nguong) hoặc top1/top2 quá sát -> trả kèm cảnh báo
+    """
+    if nguong is None:
+        nguong = NGUONG_MAC_DINH
+    if la_rac_ro_rang(cau_hoi):
+        return "Không tìm thấy thông tin liên quan."
+    raw = bai_toan_2(cau_hoi, top_k=top_k, nguong=min(NGUONG_CUNG, nguong))
     if not raw:
         return "Không tìm thấy thông tin liên quan."
+
+    diem1 = raw[0]["diem"]
+    khe = (diem1 - raw[1]["diem"]) if len(raw) > 1 else 1.0   # chỉ 1 ứng viên -> coi như rõ rệt
+    khong_chac = (diem1 < nguong) or (khe < 0.02 and diem1 < 0.85)
+
     raw = mo_rong_khoan(raw)
     output = []
     for i, r in enumerate(raw, 1):
         output.append(f"**{i}.** 📖 **{r['citation']}** "
                       f"*(độ liên quan: {r['diem']:.4f})*\n\n{r['noi_dung']}")
-    return "\n\n---\n\n".join(output)
+    tra_loi = "\n\n---\n\n".join(output)
+    if khong_chac:
+        tra_loi = ("⚠️ *Độ liên quan không cao — câu hỏi có thể nằm ngoài "
+                   "phạm vi Luật ATVSLĐ 2015, hãy kiểm tra lại trích dẫn.*\n\n" + tra_loi)
+    return tra_loi
 
 
 # ==================== PIPELINE 3 TẦNG ====================
-def chatbot_tra_loi(cau_hoi, top_k=3, nguong=0.25):
+def chatbot_tra_loi(cau_hoi, top_k=3, nguong=None):
     meta = tra_loi_metadata(cau_hoi)            # Tầng 0 — metadata văn bản
     if meta:
         return "Thông tin văn bản", meta
