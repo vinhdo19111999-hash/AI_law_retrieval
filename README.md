@@ -27,7 +27,7 @@ Hệ thống trả lời theo **3 tầng xử lý**, ưu tiên từ trên xuốn
 | Phương pháp | Hit@1 | Hit@3 | Hit@5 | MRR |
 |---|---|---|---|---|
 | TF-IDF (baseline) | 0.567 | 0.733 | 0.750 | 0.643 |
-| **E5 embedding** | **0.683** | **0.833** | **0.883** | **0.759** |
+| **E5 embedding** | **0.733** | **0.850** | **0.917** | **0.807** |
 
 *(số liệu lấy từ `reports/hinh-anh/bang-so-sanh-phuong-phap.csv`, có thể chạy lại bằng `python src/evaluation.py`)*
 
