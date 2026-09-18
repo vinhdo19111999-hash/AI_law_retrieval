@@ -1,6 +1,6 @@
 # ⚖️ Chatbot Tra cứu Luật An toàn, vệ sinh lao động 2015
 
-Dự án môn NLP / Trí tuệ nhân tạo: xây dựng hệ thống tra cứu tự động **Luật An toàn, vệ sinh lao động 2015 (Luật số: 84/2015/QH13)** bằng kỹ thuật tiền xử lý văn bản, trích xuất từ khóa (TF-IDF) và tìm kiếm ngữ nghĩa (Sentence Embedding).
+Dự án môn Trí tuệ nhân tạo: xây dựng hệ thống tra cứu tự động **Luật An toàn, vệ sinh lao động 2015 (Luật số: 84/2015/QH13)** bằng kỹ thuật tiền xử lý văn bản, trích xuất từ khóa (TF-IDF) và tìm kiếm ngữ nghĩa (Sentence Embedding).
 
 ## 📖 Giới thiệu
 
@@ -34,7 +34,7 @@ Hệ thống trả lời theo **3 tầng xử lý**, ưu tiên từ trên xuốn
 ## 📂 Cấu trúc thư mục thực tế
 
 ```text
-NLP_law_retrieval/
+AI_law_retrieval/
 │
 ├── app/
 │   └── app.py                        # Giao diện Streamlit (đọc dữ liệu + embedding + tra cứu 3 tầng)
@@ -69,8 +69,8 @@ NLP_law_retrieval/
 ## ⚙️ Cài đặt
 
 ```bash
-git clone https://github.com/vinhdo19111999-hash/NLP_law_retrieval.git
-cd NLP_law_retrieval
+git clone https://github.com/vinhdo19111999-hash/AI_law_retrieval.git
+cd AI_law_retrieval
 pip install -r requirements.txt
 ```
 
