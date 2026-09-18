@@ -19,7 +19,7 @@ DUONG_DAN_TEST_SET_MAC_DINH = os.path.join(GOC_REPO, "data", "test_questions.csv
 DUONG_DAN_CHUNKS_MAC_DINH = os.path.join(GOC_REPO, "data", "processed", "law_dataset_chunks.csv")
 THU_MUC_ANH_MAC_DINH = os.path.join(GOC_REPO, "reports", "hinh-anh")
 DUONG_DAN_TEST_SET_GITHUB = ("https://raw.githubusercontent.com/"
-                             "vinhdo19111999-hash/NLP_law_retrieval/main/"
+                             "vinhdo19111999-hash/AI_law_retrieval/main/"
                              "data/test_questions.csv")
 KHO_ANH_MAC_DINH = 150
 CAC_CHI_SO = ["Hit@1", "Hit@3", "Hit@5", "MRR"]
